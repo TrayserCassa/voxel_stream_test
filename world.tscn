@@ -1,0 +1,74 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://world.gd" type="Script" id=1]
+[ext_resource path="res://Camera.gd" type="Script" id=2]
+
+[sub_resource type="VoxelStreamRegionFiles" id=1]
+directory = "res://save"
+
+[sub_resource type="VoxelGeneratorFlat" id=2]
+channel = 0
+height = -20.0
+
+[sub_resource type="Voxel" id=3]
+voxel_name = "air"
+transparent = true
+transparency_index = 1
+
+[sub_resource type="Voxel" id=4]
+voxel_name = "solid"
+geometry_type = 1
+collision_aabbs = [ AABB( 0, 0, 0, 1, 1, 1 ) ]
+cube_geometry/padding_y = null
+cube_tiles/left = Vector2( 0, 0 )
+cube_tiles/right = Vector2( 0, 0 )
+cube_tiles/bottom = Vector2( 0, 0 )
+cube_tiles/top = Vector2( 0, 0 )
+cube_tiles/back = Vector2( 0, 0 )
+cube_tiles/front = Vector2( 0, 0 )
+
+[sub_resource type="CubeMesh" id=5]
+
+[sub_resource type="Voxel" id=6]
+voxel_name = "dirt"
+custom_mesh = SubResource( 5 )
+collision_aabbs = [ AABB( 0, 0, 0, 1, 1, 1 ) ]
+
+[sub_resource type="VoxelLibrary" id=7]
+voxels/0 = SubResource( 3 )
+voxels/1 = SubResource( 4 )
+voxels/2 = SubResource( 6 )
+
+[sub_resource type="VoxelMesherBlocky" id=8]
+library = SubResource( 7 )
+
+[sub_resource type="SpatialMaterial" id=9]
+albedo_color = Color( 0.337255, 0.690196, 0.176471, 1 )
+
+[sub_resource type="SpatialMaterial" id=10]
+albedo_color = Color( 0.137255, 0.588235, 0.54902, 1 )
+
+[sub_resource type="SpatialMaterial" id=11]
+vertex_color_use_as_albedo = true
+albedo_color = Color( 0.843137, 0.129412, 0.129412, 1 )
+
+[node name="world" type="Spatial"]
+script = ExtResource( 1 )
+terrain_path = NodePath("VoxelTerrain")
+
+[node name="VoxelTerrain" type="VoxelTerrain" parent="."]
+stream = SubResource( 1 )
+generator = SubResource( 2 )
+mesher = SubResource( 8 )
+material/0 = SubResource( 9 )
+material/1 = SubResource( 10 )
+material/2 = SubResource( 11 )
+
+[node name="VoxelViewer" type="VoxelViewer" parent="."]
+transform = Transform( 0.673422, 0.452197, -0.584825, 0.110081, 0.720938, 0.6842, 0.731016, -0.525133, 0.435718, 0.0853028, 1.44542, 3.60467 )
+requires_collisions = true
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( 0.873321, -0.398824, 0.27973, 0.110081, 0.720938, 0.6842, -0.474544, -0.566734, 0.673514, 0.0647221, 1.41261, 3.62856 )
+fov = 102.631
+script = ExtResource( 2 )
